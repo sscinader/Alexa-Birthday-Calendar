@@ -1,0 +1,7 @@
+AddNameIntent my name is {EnteredName}
+AddNameIntent i'm {EnteredName}
+AddNameIntent {EnteredName}
+AddBirthdateIntent my birthday is {EnteredBirthdate}
+AddBirthdateIntent my birthdate is {EnteredBirthdate}
+AddBirthdateIntent I was born on {EnteredBirthdate}
+AddBirthdateIntent {EnteredBirthdate}

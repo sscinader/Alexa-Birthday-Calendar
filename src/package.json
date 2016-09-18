@@ -1,0 +1,19 @@
+{
+  "name": "alexa-birthday-calendar",
+  "version": "1.0.0",
+  "description": "the code uploaded to lambda for the birthday calendar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sadie Cinader",
+  "license": "MIT",
+  "dependencies": {
+    "alexa-sdk": "^1.0.5",
+    "moment": "^2.14.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sscinader/Alexa-Birthday-Calendar.git"
+  }
+}

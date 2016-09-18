@@ -1,0 +1,31 @@
+{
+    "intents": [
+        {
+            "intent": "AddNameIntent",
+            "slots": [
+                {
+                    "name": "EnteredName",
+                    "type": "AMAZON.US_FIRST_NAME"
+                }
+            ]
+        },
+        {
+            "intent": "AddBirthdateIntent",
+            "slots": [
+                {
+                    "name": "EnteredBirthdate",
+                    "type": "AMAZON.DATE"
+                }
+            ]
+        },
+        {
+            "intent": "AMAZON.HelpIntent"
+        },
+        {
+            "intent": "AMAZON.NoIntent"
+        },
+        {
+            "intent": "AMAZON.YesIntent"
+        }
+    ]
+}

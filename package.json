@@ -1,0 +1,45 @@
+{
+  "name": "alexa-birthday-calendar",
+  "version": "1.0.0",
+  "description": "A Birthday Calendar for Amazon Alexa",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js",
+    "predeploy": "npm run lint && npm test && cd src && zip -r /tmp/alexa-calendar.zip .",
+    "deploy": "aws lambda update-function-code --function-name alexa-birthday-calendar --zip-file fileb:///tmp/alexa-calendar.zip",
+    "postdeploy": "rm /tmp/alexa-calendar.zip && cd ..",
+    "lint": "eslint src/**.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sscinader/Alexa-Birthday-Calendar.git"
+  },
+  "keywords": [
+    "Alexa",
+    "Echo",
+    "Birthdays",
+    "Calendar"
+  ],
+  "author": "Sadie Cinader",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sscinader/Alexa-Birthday-Calendar/issues"
+  },
+  "homepage": "https://github.com/sscinader/Alexa-Birthday-Calendar#readme",
+  "eslintConfig": {
+    "env": {
+      "node": true
+    },
+    "extends": "airbnb",
+    "rules": {
+      "new-cap": ["error", { "capIsNewExceptionPattern": "^Alexa" }]
+    }
+  },
+  "devDependencies": {
+    "eslint": "^3.5.0",
+    "eslint-config-airbnb": "^11.1.0",
+    "eslint-plugin-import": "^1.15.0",
+    "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-react": "^6.2.2"
+  }
+}
