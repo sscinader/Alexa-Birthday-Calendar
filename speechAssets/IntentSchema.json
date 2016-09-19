@@ -19,6 +19,15 @@
             ]
         },
         {
+            "intent": "HowOldIntent",
+            "slots": [
+                {
+                    "name": "EnteredName",
+                    "type": "AMAZON.US_FIRST_NAME"
+                }
+            ]
+        },
+        {
             "intent": "AMAZON.HelpIntent"
         },
         {
@@ -26,6 +35,12 @@
         },
         {
             "intent": "AMAZON.YesIntent"
+        },
+        {
+            "intent": "EntryModeIntent"
+        },
+        {
+            "intent": "QueryModeIntent"
         }
     ]
 }

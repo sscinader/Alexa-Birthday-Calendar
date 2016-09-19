@@ -5,3 +5,11 @@ AddBirthdateIntent my birthday is {EnteredBirthdate}
 AddBirthdateIntent my birthdate is {EnteredBirthdate}
 AddBirthdateIntent I was born on {EnteredBirthdate}
 AddBirthdateIntent {EnteredBirthdate}
+QueryModeIntent ask
+QueryModeIntent ask questions
+QueryModeIntent ask calendar
+QueryModeIntent query calendar
+EntryModeIntent enter
+EntryModeIntent enter birthday
+EntryModeIntent enter birthdate
+HowOldIntent how old is {EnteredName}
