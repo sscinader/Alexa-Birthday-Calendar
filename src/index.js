@@ -14,6 +14,50 @@ const states = {
   ENTRYMODE: '_ENTRYMODE',  // Enter Birthdays
 };
 
+/**
+ * If an array has more than one name
+ * add an 'and'. So ['sadie', 'sophia', 'aurelia']
+ * will become the string 'sadie, sophia, and aurelia'.
+ */
+const makeStringFromArray = function makeStringFromArray(array) {
+  if (array.length < 2) {
+    return array.join('');
+  }
+
+  if (array.length === 2) {
+    return array.join(' and ');
+  }
+
+  const lastNameInList = array.pop();
+  return `${array.join(', ')}, and ${lastNameInList}`;
+};
+
+const youngestToOldest = function youngestToOldest() {
+  const birthdays = this.attributes.birthdays;
+  const namesSorted = Object.keys(birthdays)
+    .sort((a, b) =>
+      -(new Date(birthdays[a]) - new Date(birthdays[b]))
+    );
+  return namesSorted;
+};
+
+const randomName = function randomName() {
+  if (!this.attributes.birthdays) {
+    return 'Sophia';
+  }
+
+  const names = Object.keys(this.attributes.birthdays);
+  if (names.length === 1) {
+    return names[0];
+  }
+
+  // randomly select a name.
+  const randInt = Math.floor(Math.random() * names.length);
+  return names[randInt];
+};
+
+// no way to get the timezone of the user so
+// everything is in utc... :(
 const addBirthday = function addBirthday() {
   if (!this.attributes.birthdays) {
     this.attributes.birthdays = {};
@@ -24,7 +68,7 @@ const addBirthday = function addBirthday() {
 
   delete this.attributes.currentlyAdding;
 
-  this.attributes.birthdays[name] = birthdate;
+  this.attributes.birthdays[name] = new Date(birthdate);
 };
 
 const enterNameIntent = function enterNameIntent() {
@@ -40,7 +84,7 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
   if (!this.attributes.owner) {
     this.handler.state = states.SETUPMODE;
     this.emit(':ask',
-      'oh my, this is embarassing, but I don\'t know who you are yet.  Please say your name',
+      'oh my, this is embarrassing, but I don\'t know who you are yet.  Please say your name',
       'say your name or quit to exit');
   }
 
@@ -58,8 +102,7 @@ const queryModeIntent = function queryModeIntent() {
   this.handler.state = states.QUERYMODE;
   this.emit(':ask',
     'What would you like to ask your birthday calendar?',
-    // add randome name function of known names
-    'You can ask, how old someone is, when is a birthday for a person, or whose birthday is next'
+    `You can ask, how old ${randomName.bind(this)()} is, when is a birthday for a person, or whose birthday is next`
   );
 };
 
@@ -95,10 +138,14 @@ const globalHandlers = {
         'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar');
     }
   },
-  SessionEnededRequest() {
+  SessionEndedRequest() {
     delete this.attributes.currentlyAdding;
     this.attributes.endedSessionCount += 1;
     this.emit(':saveState', true); // Be sure to call :saveState to persist your session attributes in DynamoDB
+  },
+  QueryModeIntent() {
+    this.handler.state = states.QUERYMODE;
+    this.emit(':ask', 'What would you like to ask the calendar?  Some things you can try.');
   },
   Unhandled() {
     this.emit(':ask', 'this is the generic unhandled', 'there should be thre re-ask...');
@@ -186,7 +233,7 @@ const entryModeHandlers = createStateHandler(states.ENTRYMODE, {
   'AMAZON.NoIntent': function () {
     if (!this.attributes.currentlyAdding) {
       // TODO: this shouldn't happen and is an error.
-      // what to do with an erro?
+      // what to do with an error?
       // should ask to enter owner name....
     }
 
@@ -195,19 +242,19 @@ const entryModeHandlers = createStateHandler(states.ENTRYMODE, {
       // and we're in the no intent, then we know that the user
       // said no when we asked them to verify the birthday.
       delete this.attributes.currentlyAdding.birthdate;
-      this.emit(':ask', `Ok, ${this.attributes.owner}, what is your birthday?`, 'Please say your birthday, or exit to quit');
+      this.emit(':ask', `Ok, what is ${this.attributes.currentlyAdding.name}'s  birthday?`, `Please say ${this.attributes.currentlyAdding.name}'s birthday, or exit to quit`);
     } else {
       // if we don't have a birthday, we should have the name but
       // since we're in the no block, they said that we got it wrong.
       // so ask them to say it again.
       delete this.attributes.currentlyAdding;
-      this.emit(':ask', 'Ok, please say your name again.', 'Please say your name, or exit to quit');
+      this.emit(':ask', 'Ok, please say the name again.', 'Please say the name, or exit to quit');
     }
   },
   'AMAZON.YesIntent': function () {
     if (!this.attributes.currentlyAdding) {
       // TODO: this shouldn't happen and is an error.
-      // what to do with an erro?
+      // what to do with an error?
       // should ask to enter owner name....
     }
 
@@ -243,12 +290,18 @@ const queryModeHandlers = createStateHandler(states.QUERYMODE, {
 
     // add fractions....
     const age = moment().diff(moment(birthday), 'years');
-    this.emit(':ask', `${name} is ${age} years old, say how old is, to get another age`);
+    this.emit(':ask', `${name} is ${age} years old. Ask another question.`);
+  },
+  ListBirthdaysIntent() {
+    const names = youngestToOldest.bind(this)();
+    const namesString = makeStringFromArray(names);
+    this.emit(':ask', `I have birthdays for ${namesString}. What would you like to know next?`,
+      ' you can ask how old, next birthday, how many days to next birthday.');
   },
 });
 
 
-exports.handler = (event, context, callback) => { // eslint-disable-line no-unused-vars
+const handler = (event, context, callback) => { // eslint-disable-line no-unused-vars
   const alexa = Alexa.handler(event, context);
   alexa.appId = appId;
   alexa.dynamoDBTableName = 'BirthdayCalendar';
@@ -259,4 +312,11 @@ exports.handler = (event, context, callback) => { // eslint-disable-line no-unus
     queryModeHandlers
   );
   alexa.execute();
+};
+
+module.exports = {
+  randomName,
+  handler,
+  youngestToOldest,
+  makeStringFromArray,
 };

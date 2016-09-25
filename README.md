@@ -17,7 +17,7 @@
 - [x] How old is [name]
 - [ ] whose calendar is this?
 - [ ] How many more days till [name]'s birthday
-- [ ] list birthdays
+- [x] list birthdays
 
 ### Entry Mode
 - [x] [name]'s birthday

@@ -13,3 +13,6 @@ EntryModeIntent enter
 EntryModeIntent enter birthday
 EntryModeIntent enter birthdate
 HowOldIntent how old is {EnteredName}
+ListBirthdaysIntent list
+ListBirthdaysIntent list birthdays
+ListBirthdaysIntent list names
