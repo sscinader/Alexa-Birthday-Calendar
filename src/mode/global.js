@@ -84,7 +84,6 @@ const handlers = {
   },
 };
 
-
 module.exports = {
   handlers,
   queryModeIntent,
