@@ -15,9 +15,9 @@ const addBirthday = function addBirthday() {
   this.attributes.birthdays[name] = new Date(birthdate);
 };
 
-// we use from date instead of just now so we can test reliably.
-const howManyDays = function howManyDays(fromString, birthdateString) {
-  const fromdate = moment(fromString);
+// Optional second argument
+const howManyDays = function howManyDays(birthdateString, todayString) {
+  const today = todayString ? moment(todayString) : moment();
   const birthdate = moment(birthdateString);
 
   const birthdateToCompare = moment({
@@ -25,16 +25,15 @@ const howManyDays = function howManyDays(fromString, birthdateString) {
     d: birthdate.date(),
   });
 
-
-  if (birthdateToCompare.isSame(fromdate, 'day')) {
+  if (birthdateToCompare.isSame(today, 'day')) {
     return 0;
   }
 
-  if (birthdateToCompare.isBefore(fromdate, 'day')) {
+  if (birthdateToCompare.isBefore(today, 'day')) {
     birthdateToCompare.add(1, 'y');
   }
 
-  return birthdateToCompare.diff(fromdate, 'days');
+  return birthdateToCompare.diff(today, 'days');
 };
 
 const youngestToOldest = function youngestToOldest() {

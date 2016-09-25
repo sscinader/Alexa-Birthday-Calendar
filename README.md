@@ -17,7 +17,7 @@
 - [ ] When is [name]'s birthday
 - [x] How old is [name]
 - [ ] Whose calendar is this?
-- [ ] How many more days till [name]'s birthday
+- [x] How many more days till [name]'s birthday
 - [ ] How many days till Christmas (easter egg :)).
 - [x] List birthdays
 

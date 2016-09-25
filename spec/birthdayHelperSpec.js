@@ -12,8 +12,8 @@ describe('Calendar Skills', () => {
 
     it('should calculate how many more days', () => {
       const testToday = '2016-09-25T17:42:20Z';
-      expect(birthdayHelper.howManyDays(testToday, '1968-12-30T00:00:00.000Z')).toBe(94);
-      expect(birthdayHelper.howManyDays(testToday, '2007-05-26T00:00:00.000Z')).toBe(241);
+      expect(birthdayHelper.howManyDays('1968-12-30T00:00:00.000Z', testToday)).toBe(94);
+      expect(birthdayHelper.howManyDays('2007-05-26T00:00:00.000Z', testToday)).toBe(241);
       expect(birthdayHelper.howManyDays(testToday, testToday)).toBe(0);
     });
   });
