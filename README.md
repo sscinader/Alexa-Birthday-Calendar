@@ -9,15 +9,17 @@
 - [ ] Edit a name
 - [ ] Edit a birthday
 - [ ] Delete an entry
+- [ ] Reset all
 
 ### Query Mode
 - [ ] Whose birthday is next?
 - [ ] Is there a birthday today?
 - [ ] When is [name]'s birthday
 - [x] How old is [name]
-- [ ] whose calendar is this?
+- [ ] Whose calendar is this?
 - [ ] How many more days till [name]'s birthday
-- [x] list birthdays
+- [ ] How many days till Christmas (easter egg :)).
+- [x] List birthdays
 
 ### Entry Mode
 - [x] [name]'s birthday
