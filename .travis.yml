@@ -1,6 +1,6 @@
 language: node_js
 install:
-  cd src
-  npm install
-  cd ..
-  npm install
+  - cd src
+  - npm install
+  - cd ..
+  - npm install
