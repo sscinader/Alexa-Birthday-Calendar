@@ -14,7 +14,7 @@
 ### Query Mode
 - [ ] Whose birthday is next?
 - [ ] Is there a birthday today?
-- [ ] When is [name]'s birthday
+- [x] When is [name]'s birthday
 - [x] How old is [name]
 - [ ] Whose calendar is this?
 - [x] How many more days till [name]'s birthday
