@@ -1,9 +1,9 @@
 const birthdayState = {
   attributes: {
     birthdays: {
-      sophia: '5-15-2010',
-      aurelia: '7-5-2014',
-      sadie: '7-26-2007',
+      sophia: '2010-05-15T00:00:00-07:00',
+      aurelia: '2014-07-05T00:00:00-07:00',
+      sadie: '2007-07-26T00:00:00-07:00',
     },
   },
 };

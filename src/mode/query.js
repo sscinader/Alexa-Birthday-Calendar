@@ -1,6 +1,8 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 const nameHelper = require('../helper/name');
 const birthdayHelper = require('../helper/birthday');
+
+moment.tz.setDefault('US/Pacific');
 
 const queryInstructionsMessage =
   'You can ask another question, say enter to add more birthdays or quit to exit.';
@@ -73,7 +75,7 @@ const handlers = {
     this.emit(':ask', `This is ${this.attributes.owner}'s Calendar`, 'Ask another question, say enter to add more birthdays or quit to exit.');
   },
   DaysToChristmasIntent() {
-    const daysToChristmas = birthdayHelper.howManyDays('12-25-00');
+    const daysToChristmas = birthdayHelper.howManyDays('2000-12-25');
     this.emit(':ask', `There are ${daysToChristmas} day to Christmas`, genericHelpForMode);
   },
   Unhandled() {

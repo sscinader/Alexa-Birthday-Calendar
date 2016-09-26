@@ -1,7 +1,11 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
+
+moment.tz.setDefault('US/Pacific');
 
 // no way to get the timezone of the user so
-// everything is in utc... :(
+// Going to (try) to nail all to Pacific Time.
+// If it has to just be one timezone, may as well
+// use ours!
 const addBirthday = function addBirthday() {
   if (!this.attributes.birthdays) {
     this.attributes.birthdays = {};
@@ -12,7 +16,7 @@ const addBirthday = function addBirthday() {
 
   delete this.attributes.currentlyAdding;
 
-  this.attributes.birthdays[name] = new Date(birthdate);
+  this.attributes.birthdays[name] = moment(birthdate, 'YYYY-MM-DD').toDate();
 };
 
 // Optional second argument
@@ -40,7 +44,7 @@ const youngestToOldest = function youngestToOldest() {
   const birthdays = this.attributes.birthdays;
   const namesSorted = Object.keys(birthdays)
     .sort((a, b) =>
-      -(new Date(birthdays[a]) - new Date(birthdays[b]))
+      -(moment(birthdays[a]).toDate() - moment(birthdays[b]).toDate())
     );
   return namesSorted;
 };

@@ -1,4 +1,6 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
+
+moment.tz.setDefault('US/Pacific');
 
 const states = require('../states');
 const nameHelper = require('../helper/name');
