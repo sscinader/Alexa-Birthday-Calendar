@@ -37,6 +37,15 @@
             ]
         },
         {
+            "intent": "WhenIsBirthdayIntent",
+            "slots": [
+                {
+                    "name": "EnteredName",
+                    "type": "AMAZON.US_FIRST_NAME"
+                }
+            ]
+        },
+        {
             "intent": "AMAZON.HelpIntent"
         },
         {

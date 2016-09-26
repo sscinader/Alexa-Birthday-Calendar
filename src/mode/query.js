@@ -9,6 +9,14 @@ const genericHelpForMode = 'Ask another question or say quit';
 const nameNotFoundMessage = name => `I can\'t find ${name}.`;
 const nameNotFoundRepeat = 'Try saying again if I got the name wrong, Or say enter to enter a name';
 
+const dePosessiveName = function dePosessiveName(name) {
+  if (name.endsWith("'s")) {
+    return name.slice(0, name.length - 2);
+  }
+
+  return name;
+};
+
 const handlers = {
   HowOldIntent() {
     const name = this.event.request.intent.slots.EnteredName.value;
@@ -33,13 +41,7 @@ const handlers = {
     );
   },
   HowManyDaysTillIntent() {
-    // figure out what is going on here.  need to configure eslint properly for this
-    // version of node
-    // eslint-disable-next-line
-    var name = this.event.request.intent.slots.EnteredName.value;
-    if (name.endsWith("'s")) {
-      name = name.slice(0, name.length - 2);
-    }
+    const name = dePosessiveName(this.event.request.intent.slots.EnteredName.value);
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
@@ -50,6 +52,22 @@ const handlers = {
       this.emit(':ask', `Today is ${name}'s birthday!  Happy Birthday!`, genericHelpForMode);
     }
     this.emit(':ask', `${name}'s birthday is in ${days} days`, genericHelpForMode);
+  },
+  WhenIsBirthdayIntent() {
+    const name = dePosessiveName(this.event.request.intent.slots.EnteredName.value);
+
+    if (!this.attributes.birthdays[name]) {
+      this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
+    }
+    const birthday = this.attributes.birthdays[name];
+    const days = birthdayHelper.howManyDays(birthday);
+    if (days === 0) {
+      this.emit(':ask', `Today is ${name}'s birthday!  Happy Birthday!`, genericHelpForMode);
+    }
+
+    return this.emit(':ask',
+      `${name}'s birthday is on <say-as interpret-as="date" format="md">${moment(birthday).format('MM/DD')}</say-as>`,
+      genericHelpForMode);
   },
   WhoseCalendarIntent() {
     this.emit(':ask', `This is ${this.attributes.owner.name}'s Calendar`, 'Ask another question, say enter to add more birthdays or quit to exit.');

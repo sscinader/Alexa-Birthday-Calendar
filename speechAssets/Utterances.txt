@@ -18,4 +18,8 @@ ListBirthdaysIntent list birthdays
 ListBirthdaysIntent list names
 WhoseCalendarIntent whose calendar is this
 WhoseCalendarIntent whose the owner of this calendar
-HowManyDaysTillIntent how many days until {EnteredName}'s birthday
+HowManyDaysTillIntent how many days until {EnteredName} birthday
+WhenIsBirthdayIntent when is {EnteredName} birthday
+WhenIsBirthdayIntent what is {EnteredName} birthday
+WhenIsBirthdayIntent what is {EnteredName} birthdate
+WhenIsBirthdayIntent when is {EnteredName} birthdate
