@@ -70,7 +70,11 @@ const handlers = {
       genericHelpForMode);
   },
   WhoseCalendarIntent() {
-    this.emit(':ask', `This is ${this.attributes.owner.name}'s Calendar`, 'Ask another question, say enter to add more birthdays or quit to exit.');
+    this.emit(':ask', `This is ${this.attributes.owner}'s Calendar`, 'Ask another question, say enter to add more birthdays or quit to exit.');
+  },
+  DaysToChristmasIntent() {
+    const daysToChristmas = birthdayHelper.howManyDays('12-25-00');
+    this.emit(':ask', `There are ${daysToChristmas} day to Christmas`, genericHelpForMode);
   },
   Unhandled() {
     this.emit(':ask',

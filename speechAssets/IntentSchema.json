@@ -65,6 +65,9 @@
         },
         {
             "intent": "WhoseCalendarIntent"
+        },
+        {
+            "intent": "DaysToChristmasIntent"
         }
     ]
 }
