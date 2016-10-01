@@ -40,6 +40,6 @@ this.attributes['birthdays'] = {
 // and validated
 this.attributes['currentlyAdding'] = {
   name: Sadie,
-  birthday: '5-26-2007'
+  birthday: '2007-05-26'
 }
 ```

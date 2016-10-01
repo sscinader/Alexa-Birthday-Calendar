@@ -2,6 +2,7 @@ const moment = require('moment-timezone');
 const nameHelper = require('../helper/name');
 const birthdayHelper = require('../helper/birthday');
 
+const DATE_FORMAT = 'YYYY-MM-DD';
 moment.tz.setDefault('US/Pacific');
 
 const queryInstructionsMessage =
@@ -28,7 +29,7 @@ const handlers = {
     const birthday = this.attributes.birthdays[name];
 
     // add fractions....
-    const age = moment().diff(moment(birthday), 'years');
+    const age = moment().diff(moment(birthday, DATE_FORMAT), 'years');
     if (age < 13) {
       // get days till birthday
     }
@@ -68,7 +69,7 @@ const handlers = {
     }
 
     return this.emit(':ask',
-      `${name}'s birthday is on <say-as interpret-as="date" format="md">${moment(birthday).format('MM/DD')}</say-as>`,
+      `${name}'s birthday is on <say-as interpret-as="date" format="md">${moment(birthday, DATE_FORMAT).format('MM/DD')}</say-as>`,
       genericHelpForMode);
   },
   WhoseCalendarIntent() {

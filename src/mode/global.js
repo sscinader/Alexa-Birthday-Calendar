@@ -1,5 +1,6 @@
 const moment = require('moment-timezone');
 
+const DATE_FORMAT = 'YYYY-MM-DD';
 moment.tz.setDefault('US/Pacific');
 
 const states = require('../states');
@@ -28,7 +29,7 @@ const enterNameIntent = function enterNameIntent() {
 
 const enterBirthdateIntent = function enterBirthdateIntent() {
   const birthdateString = this.event.request.intent.slots.EnteredBirthdate.value;
-  const birthdate = moment(birthdateString);
+  const birthdate = moment(birthdateString, DATE_FORMAT);
   const now = moment();
   if (!this.attributes.owner) {
     this.handler.state = states.SETUPMODE;
@@ -66,10 +67,12 @@ const handlers = {
       this.emit(':ask', 'Welcome to your Birthday Calendar. Let\'s start by setting you up. First, what is your name?',
         'Say your name or quit to exit.');
     } else {
-      this.handler.state = states.SETUPMODE;
-      this.emit(':ask', `Welcome to ${this.attributes.owner}'s Birthday Calendar.  ` +
-        'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar',
-        'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar');
+      this.handler.state = states.QUERYMODE;
+      console.log(this.event.request.intent.name);
+      this.emitWithState(this.event.request.intent.name);
+      // this.emit(':ask', `Welcome to ${this.attributes.owner}'s Birthday Calendar.  ` +
+      //   'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar',
+      //   'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar');
     }
   },
   SessionEndedRequest() {
