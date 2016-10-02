@@ -19,9 +19,9 @@ ListBirthdaysIntent list names
 WhoseCalendarIntent whose calendar is this
 WhoseCalendarIntent whose the owner of this calendar
 HowManyDaysTillIntent how many days until {EnteredName} birthday
+HowManyDaysTillIntent how many days to {EnteredName} birthday
+HowManyDaysTillIntent in how many days is {EnteredName} birthday
 WhenIsBirthdayIntent when is {EnteredName} birthday
-WhenIsBirthdayIntent what is {EnteredName} birthday
 WhenIsBirthdayIntent what is {EnteredName} birthdate
-WhenIsBirthdayIntent when is {EnteredName} birthdate
 DaysToChristmasIntent how many days until christmas
 DaysToChristmasIntent day to christmas

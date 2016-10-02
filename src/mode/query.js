@@ -1,8 +1,9 @@
 const moment = require('moment-timezone');
+const config = require('config');
 const nameHelper = require('../helper/name');
 const birthdayHelper = require('../helper/birthday');
 
-const DATE_FORMAT = 'YYYY-MM-DD';
+
 moment.tz.setDefault('US/Pacific');
 
 const queryInstructionsMessage =
@@ -13,6 +14,11 @@ const nameNotFoundMessage = name => `I can\'t find ${name}.`;
 const nameNotFoundRepeat = 'Try saying again if I got the name wrong, Or say enter to enter a name';
 
 const dePosessiveName = function dePosessiveName(name) {
+  if (!name) {
+    // not sure why this would happen
+    this.emitWithState('Unhandled');
+  }
+
   if (name.endsWith("'s")) {
     return name.slice(0, name.length - 2);
   }
@@ -29,7 +35,7 @@ const handlers = {
     const birthday = this.attributes.birthdays[name];
 
     // add fractions....
-    const age = moment().diff(moment(birthday, DATE_FORMAT), 'years');
+    const age = moment().diff(moment(birthday, config.dateFormat), 'years');
     if (age < 13) {
       // get days till birthday
     }
@@ -44,7 +50,7 @@ const handlers = {
     );
   },
   HowManyDaysTillIntent() {
-    const name = dePosessiveName(this.event.request.intent.slots.EnteredName.value);
+    const name = dePosessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
@@ -57,7 +63,7 @@ const handlers = {
     this.emit(':ask', `${name}'s birthday is in ${days} days`, genericHelpForMode);
   },
   WhenIsBirthdayIntent() {
-    const name = dePosessiveName(this.event.request.intent.slots.EnteredName.value);
+    const name = dePosessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
@@ -69,7 +75,7 @@ const handlers = {
     }
 
     return this.emit(':ask',
-      `${name}'s birthday is on <say-as interpret-as="date" format="md">${moment(birthday, DATE_FORMAT).format('MM/DD')}</say-as>`,
+      `${name}'s birthday is on <say-as interpret-as="date" format="md">${moment(birthday, config.dateFormat).format('MM/DD')}</say-as>`,
       genericHelpForMode);
   },
   WhoseCalendarIntent() {

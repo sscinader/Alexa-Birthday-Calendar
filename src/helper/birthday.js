@@ -1,6 +1,6 @@
 const moment = require('moment-timezone');
+const config = require('config');
 
-const DATE_FORMAT = 'YYYY-MM-DD';
 moment.tz.setDefault('US/Pacific');
 
 // no way to get the timezone of the user so
@@ -22,8 +22,8 @@ const addBirthday = function addBirthday() {
 
 // Optional second argument
 const howManyDays = function howManyDays(birthdateString, todayString) {
-  const today = todayString ? moment(todayString, DATE_FORMAT) : moment();
-  const birthdate = moment(birthdateString, DATE_FORMAT);
+  const today = todayString ? moment(todayString, config.dateFormat) : moment();
+  const birthdate = moment(birthdateString, config.dateFormat);
 
   const birthdateToCompare = moment({
     M: birthdate.month(),
@@ -45,7 +45,7 @@ const youngestToOldest = function youngestToOldest() {
   const birthdays = this.attributes.birthdays;
   const namesSorted = Object.keys(birthdays)
     .sort((a, b) =>
-      -(moment(birthdays[a], DATE_FORMAT).toDate() - moment(birthdays[b], DATE_FORMAT).toDate())
+      -(moment(birthdays[a], config.dateFormat).toDate() - moment(birthdays[b], config.dateFormat).toDate())
     );
   return namesSorted;
 };

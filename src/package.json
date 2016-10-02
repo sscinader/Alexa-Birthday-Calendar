@@ -10,7 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "alexa-sdk": "^1.0.5",
-    "moment-timezone": "^0.5.5"
+    "config": "^1.21.0",
+    "moment-timezone": "^0.5.5",
+    "winston": "^2.2.0",
+    "winston-firehose": "^1.0.6"
   },
   "repository": {
     "type": "git",

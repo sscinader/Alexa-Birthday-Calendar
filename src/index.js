@@ -1,4 +1,5 @@
 const Alexa = require('alexa-sdk');
+const logger = require('config').logger;
 
 const states = require('./states');
 const globalMode = require('./mode/global');
@@ -20,6 +21,7 @@ const entryModeHandlers = createStateHandler(states.ENTRYMODE, entryMode.handler
 const queryModeHandlers = createStateHandler(states.QUERYMODE, queryMode.handlers);
 
 const handler = (event, context, callback) => { // eslint-disable-line no-unused-vars
+  logger.info('birthday request', { event, context });
   const alexa = Alexa.handler(event, context);
   alexa.appId = appId;
   alexa.dynamoDBTableName = 'BirthdayCalendar';

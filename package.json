@@ -4,9 +4,9 @@
   "description": "A Birthday Calendar for Amazon Alexa",
   "main": "src/index.js",
   "scripts": {
-    "pretest": "node src/index.js && npm run lint",
-    "test": "jasmine",
-    "predeploy": "npm run lint && npm test && cd src && zip -r /tmp/alexa-calendar.zip .",
+    "pretest": "NODE_CONFIG_DIR=./src/config node src/index.js && npm run lint",
+    "test": "NODE_CONFIG_DIR=./src/config jasmine",
+    "predeploy": "npm run lint && npm test && cd src && zip -r /tmp/alexa-calendar.zip . -x ./config/local.js",
     "deploy": "aws lambda update-function-code --function-name alexa-birthday-calendar --zip-file fileb:///tmp/alexa-calendar.zip",
     "postdeploy": "rm /tmp/alexa-calendar.zip && cd ..",
     "lint": "eslint src/**.js"
