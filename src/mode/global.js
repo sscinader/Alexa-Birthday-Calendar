@@ -66,10 +66,14 @@ const handlers = {
       this.handler.state = states.SETUPMODE;
       this.emit(':ask', 'Welcome to your Birthday Calendar. Let\'s start by setting you up. First, what is your name?',
         'Say your name or quit to exit.');
-    } else {
+    } else if (this.event.request.intent) {
       // Go right into query mode
       this.handler.state = states.QUERYMODE;
       this.emitWithState(this.event.request.intent.name);
+    } else {
+      this.emit(':ask', `Welcome to ${this.attributes.owner}'s Birthday Calendar.  ` +
+        'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar',
+        'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar');
     }
   },
   SessionEndedRequest() {

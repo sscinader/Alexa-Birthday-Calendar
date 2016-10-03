@@ -21,7 +21,6 @@ const entryModeHandlers = createStateHandler(states.ENTRYMODE, entryMode.handler
 const queryModeHandlers = createStateHandler(states.QUERYMODE, queryMode.handlers);
 
 const handler = (event, context, callback) => { // eslint-disable-line no-unused-vars
-  logger.info('birthday request', { event, context });
   const alexa = Alexa.handler(event, context);
   alexa.appId = appId;
   alexa.dynamoDBTableName = 'BirthdayCalendar';
@@ -31,6 +30,22 @@ const handler = (event, context, callback) => { // eslint-disable-line no-unused
     entryModeHandlers,
     queryModeHandlers
   );
+
+  // wrap succeed and fail so we can log em....
+  const succeed = context.succeed;
+  // eslint-disable-next-line no-param-reassign
+  context.succeed = (response) => {
+    logger.info('success', { event, response, context });
+    succeed(response);
+  };
+
+  const fail = context.fail;
+  // eslint-disable-next-line no-param-reassign
+  context.fail = (error) => {
+    logger.warn('fail', { event, error, context });
+    fail(error);
+  };
+
   alexa.execute();
 };
 

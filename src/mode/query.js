@@ -3,6 +3,7 @@ const config = require('config');
 const nameHelper = require('../helper/name');
 const birthdayHelper = require('../helper/birthday');
 
+const logger = config.logger;
 
 moment.tz.setDefault('US/Pacific');
 
@@ -13,9 +14,10 @@ const genericHelpForMode = 'Ask another question or say quit';
 const nameNotFoundMessage = name => `I can\'t find ${name}.`;
 const nameNotFoundRepeat = 'Try saying again if I got the name wrong, Or say enter to enter a name';
 
-const dePosessiveName = function dePosessiveName(name) {
-  if (!name) {
+const dePossessiveName = function dePossessiveName(name) {
+  if (typeof name !== 'string') {
     // not sure why this would happen
+    logger.error(`dePossessiveName called with non string: ${typeof name})`);
     this.emitWithState('Unhandled');
   }
 
@@ -50,7 +52,7 @@ const handlers = {
     );
   },
   HowManyDaysTillIntent() {
-    const name = dePosessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
+    const name = dePossessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
@@ -63,7 +65,7 @@ const handlers = {
     this.emit(':ask', `${name}'s birthday is in ${days} days`, genericHelpForMode);
   },
   WhenIsBirthdayIntent() {
-    const name = dePosessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
+    const name = dePossessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
