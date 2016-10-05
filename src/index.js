@@ -25,6 +25,7 @@ const handler = (event, context, callback) => { // eslint-disable-line no-unused
   alexa.appId = appId;
   alexa.dynamoDBTableName = 'BirthdayCalendar';
   alexa.registerHandlers(
+    globalMode.statelessHandlers,
     globalMode.handlers,
     setupModeHandlers,
     entryModeHandlers,

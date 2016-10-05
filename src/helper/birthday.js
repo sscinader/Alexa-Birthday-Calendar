@@ -15,8 +15,8 @@ const addBirthday = function addBirthday() {
   const name = currentlyAdding.name;
   const birthdate = currentlyAdding.birthdate;
 
+  // FIXME: check if the name already exists.
   delete this.attributes.currentlyAdding;
-
   this.attributes.birthdays[name] = birthdate;
 };
 

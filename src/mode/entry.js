@@ -1,10 +1,8 @@
-const globalMode = require('./global');
 const birthdayHelper = require('../helper/birthday');
+const states = require('../states');
 
 const handlers = {
   // TODO: add delete entry....
-  AddNameIntent: globalMode.enterNameIntent,
-  AddBirthdateIntent: globalMode.enterBirthdateIntent,
   'AMAZON.NoIntent': function () {
     if (!this.attributes.currentlyAdding) {
       // TODO: this shouldn't happen and is an error.
@@ -43,11 +41,13 @@ const handlers = {
       );
     } else {
       birthdayHelper.addBirthday.bind(this)();
+      this.handler.state = states.QUERYMODE;
       this.emit(
         ':ask',
         `Ok, I have added ${name}'s birthday.  ` +
-        'you can say another name to add another birthday or you can say \'ask\' to ask the birthday questions?',
-        'Say ask to task birthday questions, or say a name to add more names to the calendar.');
+        'you can say another name to add another birthday or you can the birthday a question?',
+        'You can ask a question like when is someone\'s birthday, ' +
+        'or say a name to add it to the calendar.');
     }
   },
 };

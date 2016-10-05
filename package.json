@@ -42,7 +42,8 @@
         {
           "capIsNewExceptionPattern": "^Alexa"
         }
-      ]
+      ],
+      "strict": 0
     }
   },
   "devDependencies": {

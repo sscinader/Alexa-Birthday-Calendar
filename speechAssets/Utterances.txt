@@ -5,6 +5,11 @@ AddBirthdateIntent my birthday is {EnteredBirthdate}
 AddBirthdateIntent my birthdate is {EnteredBirthdate}
 AddBirthdateIntent I was born on {EnteredBirthdate}
 AddBirthdateIntent {EnteredBirthdate}
+AddBirthdateIntent {EnteredName} {EnteredBirthdate}
+AddBirthdateIntent {EnteredName} was born on {EnteredBirthdate}
+AddBirthdateIntent {EnteredName} born on {EnteredBirthdate}
+AddBirthdateIntent {EnteredName} birthday is {EnteredBirthdate}
+AddBirthdateIntent {EnteredName} birthdate is {EnteredBirthdate}
 QueryModeIntent ask
 QueryModeIntent ask questions
 QueryModeIntent ask calendar
@@ -12,12 +17,18 @@ QueryModeIntent query calendar
 EntryModeIntent enter
 EntryModeIntent enter birthday
 EntryModeIntent enter birthdate
+EntryModeIntent add
+EntryModeIntent add birthday
+EntryModeIntent add birthdate
 HowOldIntent how old is {EnteredName}
+HowOldAmIIntent how old am I
+HowOldAmIIntent I am how old
 ListBirthdaysIntent list
 ListBirthdaysIntent list birthdays
 ListBirthdaysIntent list names
 WhoseCalendarIntent whose calendar is this
-WhoseCalendarIntent whose the owner of this calendar
+WhoseCalendarIntent who's the owner of this calendar
+WhoseCalendarIntent who is the owner of this calendar
 HowManyDaysTillIntent how many days until {EnteredName} birthday
 HowManyDaysTillIntent how many days to {EnteredName} birthday
 HowManyDaysTillIntent in how many days is {EnteredName} birthday

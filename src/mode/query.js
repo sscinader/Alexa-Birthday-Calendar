@@ -28,9 +28,37 @@ const dePossessiveName = function dePossessiveName(name) {
   return name;
 };
 
+const getName = function getName() {
+  if (!this.event.request.intent.slots.EnteredName ||
+      !this.event.request.intent.slots.EnteredName.value) {
+    this.emit(':ask', 'Hm, I seem to have misplaced that name.  Can you say it again?',
+      'please say the name you are trying to enter.');
+    return false;
+  }
+
+  const me = ['me', 'my', 'i'];
+
+  const input = this.event.request.intent.slots.EnteredName.value;
+  const name = me.indexOf(input.toLowerCase()) > -1
+    ? this.attributes.owner : input;
+
+  return dePossessiveName.bind(this)(name);
+};
+
 const handlers = {
+  HowOldAmIIntent() {
+    // let's fake the input
+    this.event.request.intent.slots = {
+      EnteredName: {
+        name: 'EnteredName',
+        value: 'I',
+      },
+    };
+
+    this.emitWithState('HowOldIntent');
+  },
   HowOldIntent() {
-    const name = this.event.request.intent.slots.EnteredName.value;
+    const name = getName.bind(this)();
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
     }
@@ -52,7 +80,7 @@ const handlers = {
     );
   },
   HowManyDaysTillIntent() {
-    const name = dePossessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
+    const name = getName.bind(this)();
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
@@ -65,7 +93,7 @@ const handlers = {
     this.emit(':ask', `${name}'s birthday is in ${days} days`, genericHelpForMode);
   },
   WhenIsBirthdayIntent() {
-    const name = dePossessiveName.bind(this)(this.event.request.intent.slots.EnteredName.value);
+    const name = getName.bind(this)();
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);

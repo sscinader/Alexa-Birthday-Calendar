@@ -1,5 +1,5 @@
-const globalMode = require('./global');
 const birthdayHelper = require('../helper/birthday');
+const states = require('../states');
 
 // FIXME
 const imageObj = {
@@ -8,11 +8,6 @@ const imageObj = {
 };
 
 const handlers = {
-  AddNameIntent: globalMode.enterNameIntent,
-  AddBirthdateIntent: globalMode.enterBirthdateIntent,
-  QueryModeIntent: globalMode.queryModeIntent,
-  EntryModeIntent: globalMode.entryModeIntent,
-
   'AMAZON.NoIntent': function () {
     if (!this.attributes.currentlyAdding) {
       // TODO: this shouldn't happen and is an error.
@@ -55,15 +50,13 @@ const handlers = {
         'This is what the card says (the content)',
         imageObj);
     } else {
-      // this is so lame.  Creating a bound function and calling it.
-      // this is the way to bind "this".  I'd rather just send this
-      // as an argument, but eslint airbnb style doesn't like it.
       birthdayHelper.addBirthday.bind(this)();
-      this.state = '';
+      this.handler.state = states.ENTRYMODE;
       this.emit(
         ':ask',
-        `Ok, ${this.attributes.owner}, would you like to look up birthdays, or add more names?`,
-        'Say look up to look up birthdays, or say add to add more names to the calendar.');
+        `Ok, ${this.attributes.owner}, no let's add some birthdays!` +
+          'Say a name and birthday to add names to your calendar.',
+        'To add a birthday to your calendar you can say name was born on.');
     }
   },
 

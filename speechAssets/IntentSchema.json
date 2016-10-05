@@ -13,6 +13,10 @@
             "intent": "AddBirthdateIntent",
             "slots": [
                 {
+                    "name": "EnteredName",
+                    "type": "AMAZON.US_FIRST_NAME"
+                },
+                {
                     "name": "EnteredBirthdate",
                     "type": "AMAZON.DATE"
                 }
@@ -26,6 +30,9 @@
                     "type": "AMAZON.US_FIRST_NAME"
                 }
             ]
+        },
+        {
+            "intent": "HowOldAmIIntent"
         },
         {
             "intent": "HowManyDaysTillIntent",
@@ -68,6 +75,15 @@
         },
         {
             "intent": "DaysToChristmasIntent"
+        },
+        {
+            "intent": "AMAZON.CancelIntent"
+        },
+        {
+            "intent": "AMAZON.StopIntent"
+        },
+        {
+            "intent": "AMAZON.StartOverIntent"
         }
     ]
 }
