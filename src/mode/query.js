@@ -113,7 +113,7 @@ const handlers = {
   },
   DaysToChristmasIntent() {
     const daysToChristmas = birthdayHelper.howManyDays('2000-12-25');
-    this.emit(':ask', `There are ${daysToChristmas} day to Christmas`, genericHelpForMode);
+    this.emit(':ask', `There are ${daysToChristmas} days to Christmas`, genericHelpForMode);
   },
   Unhandled() {
     this.emit(':ask',

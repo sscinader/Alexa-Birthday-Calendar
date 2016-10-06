@@ -1,6 +1,8 @@
 const moment = require('moment-timezone');
 const config = require('config');
 
+const logger = config.logger;
+
 moment.tz.setDefault('US/Pacific');
 
 const states = require('../states');
@@ -81,6 +83,7 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
 // Handlers that will be included with each state
 const handlers = {
   NewSession() {
+    logger.debug('new session', this.event.sessionId);
     const requiresSetup =
       // is there any stored state?
       Object.keys(this.attributes).length === 0
