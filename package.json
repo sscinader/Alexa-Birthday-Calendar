@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "pretest": "NODE_CONFIG_DIR=./src/config node src/index.js && npm run lint",
-    "test": "NODE_CONFIG_DIR=./src/config jasmine",
+    "test": "NODE_CONFIG_DIR=./src/config istanbul cover jasmine",
     "predeploy": "npm run lint && npm test && cd src && zip -r /tmp/alexa-calendar.zip . -x ./config/local.js",
     "deploy": "aws lambda update-function-code --function-name alexa-birthday-calendar --zip-file fileb:///tmp/alexa-calendar.zip",
     "postdeploy": "rm /tmp/alexa-calendar.zip && cd ..",
@@ -47,11 +47,12 @@
     }
   },
   "devDependencies": {
-    "eslint": "^3.5.0",
-    "eslint-config-airbnb": "^11.1.0",
-    "eslint-plugin-import": "^1.15.0",
-    "eslint-plugin-jsx-a11y": "^2.2.2",
-    "eslint-plugin-react": "^6.2.2",
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "6.4.1",
+    "istanbul": "^0.4.5",
     "jasmine": "^2.5.2"
   }
 }

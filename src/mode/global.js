@@ -1,9 +1,8 @@
-const moment = require('moment-timezone');
 const config = require('config');
 
 const logger = config.logger;
+const moment = config.moment;
 
-moment.tz.setDefault('US/Pacific');
 
 const states = require('../states');
 const nameHelper = require('../helper/name');

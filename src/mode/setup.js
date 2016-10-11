@@ -13,6 +13,7 @@ const handlers = {
       // TODO: this shouldn't happen and is an error.
       // what to do with an error?
       // should ask to enter owner name....
+      return;
     }
 
     if (this.attributes.currentlyAdding.birthdate) {
@@ -35,6 +36,7 @@ const handlers = {
       // TODO: this shouldn't happen and is an error.
       // what to do with an error?
       // should ask to enter owner name....
+      return;
     }
     if (!this.attributes.currentlyAdding.birthdate) {
       // ok, we have the name right!  Add it to the attributes
@@ -61,11 +63,8 @@ const handlers = {
   },
 
   'AMAZON.HelpIntent': function () {
-    this.emit(':ask', 'I am thinking of a number between zero and one hundred, try to guess and I will tell you' +
-      ' if it is higher or lower.', 'Try saying a number.');
+    this.emit(':ask', 'You can say restart or stop', 'Say restart to start over or stop to quit.');
   },
-
-  // TODO: write a mode specific unhandled handler
 };
 
 module.exports = {

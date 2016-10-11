@@ -1,11 +1,9 @@
-const moment = require('moment-timezone');
 const config = require('config');
 const nameHelper = require('../helper/name');
 const birthdayHelper = require('../helper/birthday');
 
 const logger = config.logger;
-
-moment.tz.setDefault('US/Pacific');
+const moment = config.moment;
 
 const queryInstructionsMessage =
   'You can ask another question, say enter to add more birthdays or quit to exit.';
@@ -61,14 +59,15 @@ const handlers = {
     const name = getName.bind(this)();
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
+      return;
     }
     const birthday = this.attributes.birthdays[name];
 
     // add fractions....
     const age = moment().diff(moment(birthday, config.dateFormat), 'years');
-    if (age < 13) {
-      // get days till birthday
-    }
+    // if (age < 13) {
+    //   // get days till birthday
+    // }
     this.emit(':ask', `${name} is ${age} years old. Ask another question.`,
       queryInstructionsMessage);
   },

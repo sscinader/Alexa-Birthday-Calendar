@@ -1,19 +1,9 @@
-'use strict';
+const states = require('../../src/states');
 
-const states = require('../src/states');
+global.helperState = {};
 
-const birthdayState = {
-  attributes: {
-    birthdays: {
-      sophia: '2010-05-15',
-      aurelia: '2014-07-05',
-      sadie: '2007-05-26',
-    },
-  },
-};
-
-const getState = function getState() {
-  return {
+beforeEach(() => {
+  global.helperState = {
     attributes: {
       owner: 'Sadie',
     },
@@ -21,10 +11,6 @@ const getState = function getState() {
       state: states.QUERYMODE,
     },
     emit: () => { },
-    emitWithState: (arg1, arg2, arg3) => {
-      const args = [arg1, arg2, arg3].filter(e => e !== undefined);
-      global.state.emit.apply(null, args);
-    },
     event: {
       request: {
         intent: {
@@ -45,11 +31,6 @@ const getState = function getState() {
       },
     },
   };
-};
 
-beforeEach(() => {
-  global.state = getState();
-  spyOn(global.state, 'emit');
+  spyOn(global.helperState, 'emit');
 });
-
-module.exports = { birthdayState };

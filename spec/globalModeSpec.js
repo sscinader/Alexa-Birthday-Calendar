@@ -2,41 +2,13 @@
 
 const globalMode = require('../src/mode/global');
 const states = require('../src/states');
+const testHelper = require('./testHelper');
+
+let state;
 
 describe('GlobalMode', () => {
-  let state;
-
   beforeEach(() => {
-    state = {
-      attributes: {
-        owner: 'Sadie',
-      },
-      handler: {
-        state: states.QUERYMODE,
-      },
-      emit: () => { },
-      event: {
-        request: {
-          intent: {
-            slots: {
-              // slots need to be empty to mimic how it works.
-              // Only set what you want to test in the test itself.
-              // But here's what fully populated slots look like
-              // EnteredName: {
-              //   name: 'EnteredName',
-              //   value: 'Sadie',
-              // },
-              // EnteredBirthdate: {
-              //   name: 'EnteredBirthdate',
-              //   value: '2007-05-26',
-              // },
-            },
-          },
-        },
-      },
-    };
-
-    spyOn(state, 'emit');
+    state = global.state;
   });
 
   it('should fail if there is no owner', () => {
@@ -115,4 +87,107 @@ describe('GlobalMode', () => {
       `Say yes if ${name} was born on <say-as interpret-as="date" format="mdy">` +
       '5/26/2007</say-as> or say the name and birthday again so I can correct it.');
   });
+
+  it('should change to queryMode', () => {
+    const state = global.state;
+    state.handler.state = '';
+    globalMode.queryModeIntent.bind(state)();
+    expect(state.handler.state).toBe(states.QUERYMODE);
+  });
+
+  it('should change to entryMode', () => {
+    const state = global.state;
+    state.handler.state = '';
+    globalMode.entryModeIntent.bind(state)();
+    expect(state.handler.state).toBe(states.ENTRYMODE);
+  });
+
+  it('should add name to currentlyAdding', () => {
+    const state = global.state;
+    state.event.request.intent.slots.EnteredName = {
+      value: 'Aurelia',
+    }
+    globalMode.enterNameIntent.bind(state)();
+    expect(state.attributes.currentlyAdding.name)
+      .toBe('Aurelia');
+  });
+
+  describe('Global handlers', () => {
+    it('new session will require setup', () => {
+      const state = global.state;
+      delete state.attributes.owner;
+      const handlers = globalMode.handlers;
+      handlers.NewSession.bind(state)();
+      expect(state.emit).toHaveBeenCalledWith(':ask', 'Welcome to your Birthday Calendar. Let\'s start by setting you up. First, what is your name?',
+        'Say your name or quit to exit.');
+    });
+
+    it('new session will call add name if setup already and there\'s an intent', () => {
+      const state = global.state;
+      state.attributes.birthdays = { Sadie: '2010-05-26' };
+      state.event.request.intent = { name: 'TESTING'}
+      const handlers = globalMode.handlers;
+      handlers.NewSession.bind(state)();
+      expect(state.emit).toHaveBeenCalledWith('TESTING');
+    });
+
+    it('new session will call welcome intent if it has no intent', () => {
+      const state = global.state;
+      state.attributes.birthdays = { Sadie: '2010-05-26' };
+      delete state.event.request.intent
+      const handlers = globalMode.handlers;
+      handlers.NewSession.bind(state)();
+      expect(state.emit).toHaveBeenCalledWith('WelcomeIntent');
+    });
+
+    it('session end will increment ended sessions', () => {
+      const state = global.state;
+      state.attributes.endedSessionCount = 0;
+      const sessionEnd = globalMode.handlers.SessionEndedRequest.bind(state);
+      sessionEnd();
+      expect(state.attributes.endedSessionCount).toBe(1);
+    });
+
+    it('unhandled will say something', () => {
+      const state = global.state;
+      const unhandled = globalMode.handlers.Unhandled.bind(state);
+      unhandled();
+      expect(state.emit).toHaveBeenCalledWith(':ask',
+        'hmm.  Well, you can say ask to ask me birthday questions or add to add more names ' +
+        'to your calendar.',
+        'Can you tell me what to do?  You want to ask questions or add names?');
+    });
+
+    it('stop will respond', () => {
+      const state = global.state;
+      const stop = globalMode.handlers['AMAZON.StopIntent'].bind(state);
+      stop();
+      expect(state.emit).toHaveBeenCalledWith(':tell', 'Thanks for using the Birthday Calendar.  Good Bye');
+    });
+
+    it('cancel will call stop', () => {
+      const state = global.state;
+      const cancel = globalMode.handlers['AMAZON.CancelIntent'].bind(state);
+      cancel();
+      expect(state.emit).toHaveBeenCalledWith('AMAZON.StopIntent');
+    });
+
+    it('start over will call welcome', () => {
+      const state = global.state;
+      const startOver = globalMode.handlers['AMAZON.StartOverIntent'].bind(state);
+      startOver();
+      expect(state.emit).toHaveBeenCalledWith('WelcomeIntent');
+    });
+  });
+
+  describe('Stateless Handlers', () => {
+    it('welcome intent should say something', () => {
+      const state = global.state;
+      const welcome = globalMode.statelessHandlers.WelcomeIntent.bind(state);
+      welcome();
+      expect(state.emit).toHaveBeenCalledWith(':ask', `Welcome to ${state.attributes.owner}'s Birthday Calendar.  ` +
+      'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar',
+      'Say \'ask\' to lookup birthdays or \'enter\' to add people to your calendar')
+    });
+  })
 });

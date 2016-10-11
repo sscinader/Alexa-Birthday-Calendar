@@ -1,0 +1,7 @@
+instrumentation:
+  excludes: [
+    "**/spec/**",
+    "**/index.js"
+    ]
+  root: src
+  include-all-sources: true

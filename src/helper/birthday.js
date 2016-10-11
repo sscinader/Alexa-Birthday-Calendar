@@ -1,12 +1,7 @@
-const moment = require('moment-timezone');
 const config = require('config');
 
-moment.tz.setDefault('US/Pacific');
+const moment = config.moment;
 
-// no way to get the timezone of the user so
-// Going to (try) to nail all to Pacific Time.
-// If it has to just be one timezone, may as well
-// use ours!
 const addBirthday = function addBirthday() {
   if (!this.attributes.birthdays) {
     this.attributes.birthdays = {};
@@ -20,10 +15,14 @@ const addBirthday = function addBirthday() {
   this.attributes.birthdays[name] = birthdate;
 };
 
-// Optional second argument
+// Optional second argument to help with consistent testing
 const howManyDays = function howManyDays(birthdateString, todayString) {
-  const today = todayString ? moment(todayString, config.dateFormat) : moment();
+  // this next funky incantation will give you today at midnight -- which is what
+  // you want to compare.
+  const startOfToday = moment(moment().format(config.dateFormat), config.dateFormat);
+  const today = todayString ? moment(todayString, config.dateFormat) : startOfToday;
   const birthdate = moment(birthdateString, config.dateFormat);
+
 
   const birthdateToCompare = moment({
     M: birthdate.month(),

@@ -1,13 +1,17 @@
 const birthdayHelper = require('../helper/birthday');
 const states = require('../states');
+const logger = require('config').logger;
 
 const handlers = {
   // TODO: add delete entry....
   'AMAZON.NoIntent': function () {
     if (!this.attributes.currentlyAdding) {
-      // TODO: this shouldn't happen and is an error.
-      // what to do with an error?
-      // should ask to enter owner name....
+      // this shouldn't happen
+      logger.error('in Entry No Intent without currently Adding', this);
+      this.emit(':ask', 'Ok, please say the name again',
+        'Please say the name, or exit to quit'
+      );
+      return;
     }
 
     if (this.attributes.currentlyAdding.birthdate) {
@@ -26,14 +30,17 @@ const handlers = {
   },
   'AMAZON.YesIntent': function () {
     if (!this.attributes.currentlyAdding) {
-      // TODO: this shouldn't happen and is an error.
-      // what to do with an error?
-      // should ask to enter owner name....
+      logger.error('in Entry Yes Intent without currently Adding', this);
+      this.emit(':ask',
+        'Hm, I lost your input.  Sorry.  Please say your name and birthday again.',
+        'Please say your name and birthday again'
+      );
+      return;
     }
 
     const name = this.attributes.currentlyAdding.name;
     if (!this.attributes.currentlyAdding.birthdate) {
-      // ok, we have the name right!  Add it to the attributes
+      // ok, we have the name right!
       this.emit(
         ':ask',
         `Ok, What is ${name}'s birthday?`,
