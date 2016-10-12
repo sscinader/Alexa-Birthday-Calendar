@@ -16,7 +16,7 @@
 - [ ] Reset all
 
 ### Query Mode
-- [ ] Whose birthday is next?
+- [x] Whose birthday is next?
 - [x] When is [name]'s birthday
 - [x] How old is [name]
 - [x] Whose calendar is this?

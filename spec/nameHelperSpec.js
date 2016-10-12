@@ -1,3 +1,5 @@
+'use strict';
+
 const nameHelper = require('../src/helper/name');
 const testHelper = require('./testHelper');
 
@@ -44,6 +46,14 @@ describe('Names', () => {
       const threeNames = ['sadie', 'sophia', 'aurelia'];
       const result3 = nameHelper.makeStringFromArray(threeNames);
       expect(result3).toBe('sadie, sophia, and aurelia');
+    });
+
+    it('should error if we try to deposes a non string', () => {
+      const state = global.state;
+      let name;
+
+      nameHelper.dePossessiveName.bind(state)(name);
+      expect(state.emit).toHaveBeenCalledWith('Unhandled');
     });
   });
 });

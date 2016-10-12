@@ -16,7 +16,8 @@ describe('QueryMode', () => {
   });
 
   it('HowOldIntent with no name will say error', () => {
-  const howOldIntent = queryMode.handlers.HowOldIntent.bind(state);
+    const state = global.state;
+    const howOldIntent = queryMode.handlers.HowOldIntent.bind(state);
     howOldIntent();
 
     expect(state.emit).toHaveBeenCalledWith(':ask', 'Hm, I seem to have misplaced that name.  Can you say it again?',
@@ -28,7 +29,7 @@ describe('QueryMode', () => {
     state.event.request.intent.slots = {
       EnteredName: {
         value: 'Cory',
-      }
+      },
     };
 
     const howOldIntent = queryMode.handlers.HowOldIntent.bind(state);
@@ -44,7 +45,23 @@ describe('QueryMode', () => {
     state.event.request.intent.slots = {
       EnteredName: {
         value: 'sophia',
-      }
+      },
+    };
+
+    const howOldIntent = queryMode.handlers.HowOldIntent.bind(state);
+    howOldIntent();
+
+    expect(state.emit).toHaveBeenCalledWith(':ask', 'sophia is 6 years old. Ask another question.', 'You can ask another question, say enter to add more birthdays or quit to exit.');
+  });
+
+  it('HowOldIntent with possessive input will work', () => {
+    const state = global.state;
+    // let's make sophia six years old no matter what
+    state.attributes.birthdays.sophia = moment().subtract(6, 'years');
+    state.event.request.intent.slots = {
+      EnteredName: {
+        value: 'sophia\'s',
+      },
     };
 
     const howOldIntent = queryMode.handlers.HowOldIntent.bind(state);
@@ -66,17 +83,57 @@ describe('QueryMode', () => {
   it('should tell how many days till birthday', () => {
     const state = global.state;
     // let's make sophia six years old no matter what
-    state.attributes.birthdays.sophia = moment().subtract(6, 'years');
+    state.attributes.birthdays.sophia = moment()
+      .subtract(6, 'years')
+      .format('YYYY-MM-DD');
     state.event.request.intent.slots = {
       EnteredName: {
         value: 'sophia',
-      }
+      },
     };
 
     const howManyDays = queryMode.handlers.HowManyDaysTillIntent.bind(state);
     howManyDays();
 
     expect(state.emit).toHaveBeenCalledWith(':ask', 'Today is sophia\'s birthday!  Happy Birthday!', 'Ask another question or say quit');
+  });
+
+  it('should tell how many days till my birthday', () => {
+    const state = global.state;
+    // let's make Sadie nine years old and one month no matter what
+    state.attributes.birthdays.Sadie = moment()
+      .subtract(9, 'years')
+      .add(2, 'days')
+      .format('YYYY-MM-DD');
+    state.event.request.intent.slots = {
+      EnteredName: {
+        value: 'my',
+      },
+    };
+
+    const howManyDays = queryMode.handlers.HowManyDaysTillIntent.bind(state);
+    howManyDays();
+
+    expect(state.emit).toHaveBeenCalledWith(':ask', 'Sadie\'s birthday is in 2 days', 'Ask another question or say quit');
+  });
+
+  it('should tell me my birthday is in one day', () => {
+    const state = global.state;
+    // let's make Sadie nine years old and one month no matter what
+    state.attributes.birthdays.Sadie = moment()
+      .subtract(9, 'years')
+      .add(1, 'days')
+      .format('YYYY-MM-DD');
+    state.event.request.intent.slots = {
+      EnteredName: {
+        value: 'my',
+      },
+    };
+
+    const howManyDays = queryMode.handlers.HowManyDaysTillIntent.bind(state);
+    howManyDays();
+
+    expect(state.emit).toHaveBeenCalledWith(':ask', 'Sadie\'s birthday is in 1 day', 'Ask another question or say quit');
   });
 
   it('should tell when a birthday is', () => {
@@ -116,4 +173,86 @@ describe('QueryMode', () => {
     expect(state.emit).toHaveBeenCalled();
   });
 
+  it('should say next birthday when only one birthday today', () => {
+    const today = moment();
+    const tomorrow = moment().add(1, 'days');
+    const dayAfterTomorrow = moment().add(2, 'days');
+
+    const state = global.state;
+    const birthdays = {
+      third: dayAfterTomorrow.format('YYYY-MM-DD'),
+      first: today.format('YYYY-MM-DD'),
+      second: tomorrow.format('YYYY-MM-DD'),
+    };
+    state.attributes.birthdays = birthdays;
+    const sortedBirthdays = queryMode.handlers.NextBirthdayIntent.bind(state);
+    sortedBirthdays();
+    expect(state.emit).toHaveBeenCalledWith(
+      ':ask',
+      'Today is first\'s birthday',
+      'you can ask another question, add a new name or quit');
+  });
+
+  it('should say next birthday when more than one birthday today', () => {
+    const today = moment();
+    const alsoToday = moment();
+    const dayAfterTomorrow = moment().add(2, 'days');
+
+    const state = global.state;
+    const birthdays = {
+      third: dayAfterTomorrow.format('YYYY-MM-DD'),
+      first: today.format('YYYY-MM-DD'),
+      alsoFirst: alsoToday.format('YYYY-MM-DD'),
+    };
+    state.attributes.birthdays = birthdays;
+    const sortedBirthdays = queryMode.handlers.NextBirthdayIntent.bind(state);
+    sortedBirthdays();
+
+    expect(state.emit).toHaveBeenCalledWith(
+      ':ask',
+      'Today is first and alsoFirst\'s birthday',
+      'you can ask another question, add a new name or quit');
+  });
+
+  it('should say next birthday when more than one birthday', () => {
+    const today = moment().add(1, 'days');
+    const alsoToday = moment().add(1, 'days');
+    const dayAfterTomorrow = moment().add(2, 'days');
+
+    const state = global.state;
+    const birthdays = {
+      third: dayAfterTomorrow.format('YYYY-MM-DD'),
+      first: today.format('YYYY-MM-DD'),
+      alsoFirst: alsoToday.format('YYYY-MM-DD'),
+    };
+    state.attributes.birthdays = birthdays;
+    const sortedBirthdays = queryMode.handlers.NextBirthdayIntent.bind(state);
+    sortedBirthdays();
+
+    expect(state.emit).toHaveBeenCalledWith(
+      ':ask',
+      'first and alsoFirst have the next birthdays in 1 day',
+      'you can ask another question, add a new name or quit');
+  });
+
+  it('should say next birthday when more than one days in future', () => {
+    const first = moment().add(2, 'days').format('YYYY-MM-DD');
+    const second = moment().add(3, 'days').format('YYYY-MM-DD');
+    const third = moment().add(4, 'days').format('YYYY-MM-DD');
+
+    const state = global.state;
+    const birthdays = {
+      third,
+      first,
+      second,
+    };
+    state.attributes.birthdays = birthdays;
+    const sortedBirthdays = queryMode.handlers.NextBirthdayIntent.bind(state);
+    sortedBirthdays();
+
+    expect(state.emit).toHaveBeenCalledWith(
+      ':ask',
+      'first has the next birthday in 2 days',
+      'you can ask another question, add a new name or quit');
+  });
 });

@@ -1,4 +1,5 @@
 const config = require('config');
+const _ = require('lodash');
 
 const moment = config.moment;
 
@@ -44,14 +45,23 @@ const youngestToOldest = function youngestToOldest() {
   const birthdays = this.attributes.birthdays;
   const namesSorted = Object.keys(birthdays)
     .sort((a, b) =>
-      -(moment(birthdays[a], config.dateFormat).toDate() - moment(birthdays[b], config.dateFormat).toDate())
+      -(moment(birthdays[a], config.dateFormat).toDate()
+        - moment(birthdays[b], config.dateFormat).toDate())
     );
   return namesSorted;
 };
 
+const sortedBirthdays = function sortedBirthdays() {
+  const birthdays = this.attributes.birthdays;
+  const sorted = _.map(birthdays, (birthday, name) => [name, howManyDays(birthday)])
+    .sort((a, b) => a[1] - b[1]);
+
+  return sorted;
+};
 
 module.exports = {
   addBirthday,
   howManyDays,
   youngestToOldest,
+  sortedBirthdays,
 };

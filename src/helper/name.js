@@ -1,3 +1,4 @@
+const logger = require('config').logger;
 
 /**
  * Get a random name from our list of birthdays.  Handle corner cases.
@@ -35,7 +36,23 @@ const makeStringFromArray = function makeStringFromArray(array) {
   return `${array.join(', ')}, and ${lastNameInList}`;
 };
 
+const dePossessiveName = function dePossessiveName(name) {
+  if (typeof name !== 'string') {
+    // not sure why this would happen
+    logger.error(`dePossessiveName called with non string: ${typeof name})`);
+    this.emitWithState('Unhandled');
+    return name;
+  }
+
+  if (name.endsWith("'s")) {
+    return name.slice(0, name.length - 2);
+  }
+
+  return name;
+};
+
 module.exports = {
+  dePossessiveName,
   randomName,
   makeStringFromArray,
 };
