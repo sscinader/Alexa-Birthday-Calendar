@@ -6,6 +6,7 @@
 1. Doesn't handle prosesive names well
 1. No real way to get last names
 1. Due to #2, there's not really a way to handle multiples with the same first name.
+
 ### Setup Mode
 - [x] What is calendar owner's  name?
 - [x] When is calendar owner's Birthday?
