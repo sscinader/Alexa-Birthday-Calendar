@@ -7,7 +7,7 @@ const moment = config.moment;
 describe('Calendar Skills', () => {
   describe('Working with birthdays', () => {
     it('should list oldest to youngest', () => {
-      const sorted = birthdayHelper.youngestToOldest.bind(testHelper.birthdayState)();
+      const sorted = birthdayHelper.youngestToOldest.call(testHelper.birthdayState);
       expect(sorted[0]).toBe('aurelia');
       expect(sorted[1]).toBe('sophia');
       expect(sorted[2]).toBe('sadie');
@@ -49,7 +49,7 @@ describe('Calendar Skills', () => {
         },
       };
 
-      birthdayHelper.addBirthday.bind(state)();
+      birthdayHelper.addBirthday.call(state);
       expect(state.attributes.currentlyAdding).toBe(undefined);
       expect(state.attributes.birthdays.Sadie).toBe('2007-05-26');
     });
@@ -67,7 +67,7 @@ describe('Calendar Skills', () => {
         },
       };
 
-      birthdayHelper.addBirthday.bind(state)();
+      birthdayHelper.addBirthday.call(state);
       expect(state.attributes.currentlyAdding).toBe(undefined);
       expect(state.attributes.birthdays.Sadie).toBe('2007-05-26');
     });

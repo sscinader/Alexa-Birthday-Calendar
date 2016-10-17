@@ -9,7 +9,7 @@ describe('Names', () => {
       const state = {
         attributes: {},
       };
-      const name = nameHelper.randomName.bind(state)();
+      const name = nameHelper.randomName.call(state);
       expect(name).toBe('Sophia');
     });
 
@@ -22,12 +22,12 @@ describe('Names', () => {
         },
       };
 
-      const name = nameHelper.randomName.bind(state)();
+      const name = nameHelper.randomName.call(state);
       expect(name).toBe('Sadie');
     });
 
     it('should get random name when there is more than one name', () => {
-      const name = nameHelper.randomName.bind(testHelper.birthdayState)();
+      const name = nameHelper.randomName.call(testHelper.birthdayState);
       const names = Object.keys(testHelper.birthdayState.attributes.birthdays);
       expect(names).toContain(name);
     });
@@ -52,7 +52,7 @@ describe('Names', () => {
       const state = global.state;
       let name;
 
-      nameHelper.dePossessiveName.bind(state)(name);
+      nameHelper.dePossessiveName.call(state, name);
       expect(state.emit).toHaveBeenCalledWith('Unhandled');
     });
   });

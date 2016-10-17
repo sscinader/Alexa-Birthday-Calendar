@@ -47,7 +47,7 @@ const handlers = {
         `Say ${name}'s birthday including year`
       );
     } else {
-      birthdayHelper.addBirthday.bind(this)();
+      birthdayHelper.addBirthday.call(this);
       this.handler.state = states.QUERYMODE;
       this.emit(
         ':ask',

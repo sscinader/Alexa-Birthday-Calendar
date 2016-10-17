@@ -1,9 +1,10 @@
 'use strict';
+
 const entry = require('../src/mode/entry');
 
 let state;
 let noIntent;
-let yesIntent
+let yesIntent;
 
 describe('EnterMode', () => {
   beforeEach(() => {

@@ -143,7 +143,7 @@ describe('QueryMode', () => {
     state.event.request.intent.slots = {
       EnteredName: {
         value: 'sophia',
-      }
+      },
     };
 
     const whenIsBirthday = queryMode.handlers.WhenIsBirthdayIntent.bind(state);

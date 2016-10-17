@@ -58,6 +58,4 @@ describe('setupMode', () => {
     helpIntent();
     expect(state.emit).toHaveBeenCalledWith(':ask', 'You can say restart or stop', 'Say restart to start over or stop to quit.');
   });
-
-
 });

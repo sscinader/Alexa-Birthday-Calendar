@@ -11,7 +11,7 @@ const queryModeIntent = function queryModeIntent() {
   this.handler.state = states.QUERYMODE;
   this.emit(':ask',
     'What would you like to ask your birthday calendar?',
-    `You can ask, how old ${nameHelper.randomName.bind(this)()} is, when is a birthday for a person, or whose birthday is next`
+    `You can ask, how old ${nameHelper.randomName.call(this)} is, when is a birthday for a person, or whose birthday is next`
   );
 };
 

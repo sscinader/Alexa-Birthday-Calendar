@@ -27,7 +27,7 @@ const getName = function getName() {
   const name = me.indexOf(input.toLowerCase()) > -1
     ? this.attributes.owner : input;
 
-  return nameHelper.dePossessiveName.bind(this)(name);
+  return nameHelper.dePossessiveName.call(this, name);
 };
 
 const handlers = {
@@ -43,7 +43,7 @@ const handlers = {
     this.emitWithState('HowOldIntent');
   },
   HowOldIntent() {
-    const name = getName.bind(this)();
+    const name = getName.call(this);
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
       return;
@@ -59,14 +59,14 @@ const handlers = {
       queryInstructionsMessage);
   },
   ListBirthdaysIntent() {
-    const names = birthdayHelper.youngestToOldest.bind(this)();
+    const names = birthdayHelper.youngestToOldest.call(this);
     const namesString = nameHelper.makeStringFromArray(names);
     this.emit(':ask', `I have birthdays for ${namesString}. What would you like to know next?`,
       queryInstructionsMessage
     );
   },
   HowManyDaysTillIntent() {
-    const name = getName.bind(this)();
+    const name = getName.call(this);
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
@@ -80,7 +80,7 @@ const handlers = {
     this.emit(':ask', `${name}'s birthday is in ${days} day${pluralDay}`, genericHelpForMode);
   },
   WhenIsBirthdayIntent() {
-    const name = getName.bind(this)();
+    const name = getName.call(this);
 
     if (!this.attributes.birthdays[name]) {
       this.emit(':ask', nameNotFoundMessage(name), nameNotFoundRepeat);
@@ -98,7 +98,7 @@ const handlers = {
   NextBirthdayIntent() {
     // there should always be at least one birthday to get here.
     // an array with name in 0 and days to birthday in 1
-    const sortedBirthdays = birthdayHelper.sortedBirthdays.bind(this)();
+    const sortedBirthdays = birthdayHelper.sortedBirthdays.call(this);
     const firstBirthdays = [];
     let minDays;
     for (let i = 0; i < sortedBirthdays.length; i += 1) {

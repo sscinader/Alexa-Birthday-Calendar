@@ -52,7 +52,7 @@ const handlers = {
         'This is what the card says (the content)',
         imageObj);
     } else {
-      birthdayHelper.addBirthday.bind(this)();
+      birthdayHelper.addBirthday.call(this);
       this.handler.state = states.ENTRYMODE;
       this.emit(
         ':ask',
