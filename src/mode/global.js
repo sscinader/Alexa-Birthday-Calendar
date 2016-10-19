@@ -82,7 +82,6 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
     this.attributes.currentlyAdding = { name: nameSlot };
   }
   const name = this.attributes.currentlyAdding.name;
-
   const birthdateString = this.event.request.intent.slots.EnteredBirthdate.value;
   const birthdate = moment(birthdateString, config.dateFormat);
   const now = moment();
@@ -94,6 +93,7 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
     this.emit(':ask', 'You need to include the year you were born.', 'Say your birthday including the year');
     delete this.attributes.currentlyAdding.name;
   } else {
+    this.handler.state = states.ENTRYMODE;
     this.attributes.currentlyAdding.birthdate = birthdateString;
     if (this.event.request.intent.slots.EnteredName) {
       // adding name and date at the same time.
@@ -137,6 +137,7 @@ const handlers = {
     }
   },
   SessionEndedRequest() {
+    logger.debug('session ended request');
     delete this.attributes.currentlyAdding;
     this.attributes.endedSessionCount += 1;
     this.emit(':saveState', true); // Be sure to call :saveState to persist your session attributes in DynamoDB
