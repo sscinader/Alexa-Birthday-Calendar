@@ -3,7 +3,6 @@ const config = require('config');
 const logger = config.logger;
 const moment = config.moment;
 
-
 const states = require('../states');
 const nameHelper = require('../helper/name');
 
@@ -22,11 +21,38 @@ const entryModeIntent = function entryModeIntent() {
     'Say a name or say quit to exit');
 };
 
+const getName = function getName() {
+  if (this.event.request.intent.slots.LastNameInitial.value) {
+    return this.event.request.intent.slots.EnteredName.value.concat(
+    ' ',
+    this.event.request.intent.slots.LastNameInitial.value);
+  }
+  return this.event.request.intent.slots.EnteredName.value;
+};
+
+/**
+ * make sure everything is lower case before checking if we have a match
+ */
+const nameExists = function nameExists(name) {
+  if (!this.attributes.birthdays) {
+    return false;
+  }
+  const index = Object
+    .keys(this.attributes.birthdays)
+    .map(e => e.toLowerCase()).indexOf(name.toLowerCase());
+
+  return index > -1;
+};
+
 const enterNameIntent = function enterNameIntent() {
   this.handler.state = states.ENTRYMODE;
-  const name = this.event.request.intent.slots.EnteredName.value;
-  this.attributes.currentlyAdding = { name };
-  this.emit(':ask', `Ok, I heard ${name}, is that correct?`, `Say yes if the name, ${name} is correct, or no to reenter.`);
+  const name = getName.call(this);
+  if (nameExists.call(this, name)) {
+    this.emit(':ask', `hm, we already have a ${name}, say it again with an initial for the last name or a last name`, 'We have that name already.  Say the name with the last name or last initial.');
+  } else {
+    this.attributes.currentlyAdding = { name };
+    this.emit(':ask', `Ok, I heard ${name}, is that correct?`, `Say yes if the name, ${name} is correct, or no to reenter.`);
+  }
 };
 
 const enterBirthdateIntent = function enterBirthdateIntent() {
@@ -50,7 +76,7 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
   // the name will either come from attributes or a slot (depending on if this bday is being
   // added in one step or two).  So handle both scenarios.
   const nameSlot = this.event.request.intent.slots.EnteredName
-    ? this.event.request.intent.slots.EnteredName.value
+    ? getName.call(this)
     : undefined;
   if (nameSlot) {
     this.attributes.currentlyAdding = { name: nameSlot };
@@ -61,8 +87,12 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
   const birthdate = moment(birthdateString, config.dateFormat);
   const now = moment();
 
-  if (birthdate.year() >= now.year()) {
+  if (nameExists.call(this, name)) {
+    this.emit(':ask', `hm, we already have a ${name}, say it again with an initial for the last name or a last name`, 'We have that name already.  Say the name with the last name or last initial.');
+    delete this.attributes.currentlyAdding.name;
+  } else if (birthdate.year() >= now.year()) {
     this.emit(':ask', 'You need to include the year you were born.', 'Say your birthday including the year');
+    delete this.attributes.currentlyAdding.name;
   } else {
     this.attributes.currentlyAdding.birthdate = birthdateString;
     if (this.event.request.intent.slots.EnteredName) {
