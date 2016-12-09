@@ -6,11 +6,6 @@
                 {
                     "name": "EnteredName",
                     "type": "AMAZON.US_FIRST_NAME"
-                },
-                {
-                    "name": "LastNameInitial",
-                    "type": "LETTER"
-
                 }
             ]
         },
@@ -24,11 +19,6 @@
                 {
                     "name": "EnteredBirthdate",
                     "type": "AMAZON.DATE"
-                },
-                {
-                    "name": "LastNameInitial",
-                    "type": "LETTER"
-
                 }
             ]
         },
@@ -38,11 +28,6 @@
                 {
                     "name": "EnteredName",
                     "type": "AMAZON.US_FIRST_NAME"
-                },
-                {
-                    "name": "LastNameInitial",
-                    "type": "LETTER"
-
                 }
             ]
         },
@@ -55,11 +40,6 @@
                 {
                     "name": "EnteredName",
                     "type": "AMAZON.US_FIRST_NAME"
-                },
-                {
-                    "name": "LastNameInitial",
-                    "type": "LETTER"
-
                 }
             ]
         },
@@ -69,11 +49,6 @@
                 {
                     "name": "EnteredName",
                     "type": "AMAZON.US_FIRST_NAME"
-                },
-                {
-                    "name": "LastNameInitial",
-                    "type": "LETTER"
-
                 }
             ]
         },

@@ -16,8 +16,10 @@ const logger = new (winston.Logger)({
       firehoseOptions: {
         region: 'us-east-1',
       },
+      level: 'debug',
     }),
   ],
+  level: 'debug',
 });
 
 module.exports = {

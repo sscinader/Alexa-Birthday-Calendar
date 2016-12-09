@@ -51,7 +51,12 @@ const dePossessiveName = function dePossessiveName(name) {
   return name;
 };
 
+const getName = function getName() {
+  return this.event.request.intent.slots.EnteredName.value;
+};
+
 module.exports = {
+  getName,
   dePossessiveName,
   randomName,
   makeStringFromArray,

@@ -2,7 +2,6 @@
 
 const globalMode = require('../src/mode/global');
 const states = require('../src/states');
-const testHelper = require('./testHelper');
 
 let state;
 
@@ -37,9 +36,6 @@ describe('GlobalMode', () => {
       EnteredBirthdate: {
         name: 'EnteredBirthdate',
         value: '2017-05-26',
-      },
-      LastNameInitial: {
-        name: 'LastNameInitial',
       },
     };
 
@@ -81,9 +77,6 @@ describe('GlobalMode', () => {
         name: 'EnteredName',
         value: name,
       },
-      LastNameInitial: {
-        name: 'LastNameInitial',
-      },
     };
 
     globalMode.enterBirthdateIntent.call(state);
@@ -92,69 +85,6 @@ describe('GlobalMode', () => {
       '5/26/2007</say-as>, is that correct?',
       `Say yes if ${name} was born on <say-as interpret-as="date" format="mdy">` +
       '5/26/2007</say-as> or say the name and birthday again so I can correct it.');
-  });
-
-  it('should ask for a last name initial if the name already exists', () => {
-    state.attributes.birthdays = testHelper.birthdayState.attributes.birthdays;
-
-    const name = 'sadie';
-    const birthdate = '2001-01-01'; // that's not her birthday ;)
-
-    state.event.request.intent.slots = {
-      EnteredBirthdate: {
-        name: 'EnteredBirthdate',
-        value: birthdate,
-      },
-      EnteredName: {
-        name: 'EnteredName',
-        value: name,
-      },
-      LastNameInitial: {
-        name: 'LastNameInitial',
-      },
-    };
-
-    globalMode.enterBirthdateIntent.call(state);
-    expect(state.attributes.currentlyAdding.name).toBe(undefined);
-    expect(state.emit).toHaveBeenCalledWith(
-      ':ask',
-      `hm, we already have a ${name}, say it again with an initial for the last name or a last name`,
-      'We have that name already.  Say the name with the last name or last initial.'
-    );
-
-    globalMode.enterNameIntent.call(state);
-    expect(state.attributes.currentlyAdding.name).toBe(undefined);
-    expect(state.emit).toHaveBeenCalledWith(
-      ':ask',
-      `hm, we already have a ${name}, say it again with an initial for the last name or a last name`,
-      'We have that name already.  Say the name with the last name or last initial.'
-    );
-  });
-
-  it('should store a last name/initial', () => {
-    state.attributes.birthdays = testHelper.birthdayState.attributes.birthdays;
-
-    const name = 'Sophia';
-    const lastName = 'O';
-    const birthdate = '2001-01-01'; // that's not her birthday ;)
-
-    state.event.request.intent.slots = {
-      EnteredBirthdate: {
-        name: 'EnteredBirthdate',
-        value: birthdate,
-      },
-      EnteredName: {
-        name: 'EnteredName',
-        value: name,
-      },
-      LastNameInitial: {
-        name: 'LastNameInitial',
-        value: lastName,
-      },
-    };
-
-    globalMode.enterBirthdateIntent.call(state);
-    expect(state.attributes.currentlyAdding.name).toBe('Sophia O');
   });
 
   it('should change to queryMode', () => {
@@ -174,9 +104,6 @@ describe('GlobalMode', () => {
       EnteredName: {
         name: 'EnteredName',
         value: 'Aurelia',
-      },
-      LastNameInitial: {
-        name: 'LastNameInitial',
       },
     };
 

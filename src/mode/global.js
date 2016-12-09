@@ -21,15 +21,6 @@ const entryModeIntent = function entryModeIntent() {
     'Say a name or say quit to exit');
 };
 
-const getName = function getName() {
-  if (this.event.request.intent.slots.LastNameInitial.value) {
-    return this.event.request.intent.slots.EnteredName.value.concat(
-    ' ',
-    this.event.request.intent.slots.LastNameInitial.value);
-  }
-  return this.event.request.intent.slots.EnteredName.value;
-};
-
 /**
  * make sure everything is lower case before checking if we have a match
  */
@@ -46,9 +37,9 @@ const nameExists = function nameExists(name) {
 
 const enterNameIntent = function enterNameIntent() {
   this.handler.state = states.ENTRYMODE;
-  const name = getName.call(this);
+  const name = nameHelper.getName.call(this);
   if (nameExists.call(this, name)) {
-    this.emit(':ask', `hm, we already have a ${name}, say it again with an initial for the last name or a last name`, 'We have that name already.  Say the name with the last name or last initial.');
+    this.emit(':ask', `hm, we already have the name ${name}, can you pick a nickname?`, 'We have that name already.  Can you pick a nickname?');
   } else {
     this.attributes.currentlyAdding = { name };
     this.emit(':ask', `Ok, I heard ${name}, is that correct?`, `Say yes if the name, ${name} is correct, or no to reenter.`);
@@ -76,18 +67,20 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
   // the name will either come from attributes or a slot (depending on if this bday is being
   // added in one step or two).  So handle both scenarios.
   const nameSlot = this.event.request.intent.slots.EnteredName
-    ? getName.call(this)
+    ? nameHelper.getName.call(this)
     : undefined;
   if (nameSlot) {
     this.attributes.currentlyAdding = { name: nameSlot };
   }
+
+  // got an npe on the next line.  How to prevent that?
   const name = this.attributes.currentlyAdding.name;
   const birthdateString = this.event.request.intent.slots.EnteredBirthdate.value;
   const birthdate = moment(birthdateString, config.dateFormat);
   const now = moment();
 
   if (nameExists.call(this, name)) {
-    this.emit(':ask', `hm, we already have a ${name}, say it again with an initial for the last name or a last name`, 'We have that name already.  Say the name with the last name or last initial.');
+    this.emit(':ask', `hm, we already have that ${name}, can you pick a nickname instead?`, 'We have that name already.  Pick a nickname.');
     delete this.attributes.currentlyAdding.name;
   } else if (birthdate.year() >= now.year()) {
     this.emit(':ask', 'You need to include the year you were born.', 'Say your birthday including the year');
@@ -112,7 +105,7 @@ const enterBirthdateIntent = function enterBirthdateIntent() {
 // Handlers that will be included with each state
 const handlers = {
   NewSession() {
-    logger.debug('new session', this.event.sessionId);
+    logger.debug('new session', this.event);
     const requiresSetup =
       // is there any stored state?
       Object.keys(this.attributes).length === 0

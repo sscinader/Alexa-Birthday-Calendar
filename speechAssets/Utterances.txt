@@ -1,15 +1,11 @@
 AddNameIntent my name is {EnteredName}
-AddNameIntent my name is {EnteredName} {LastNameInitial}
 AddNameIntent i'm {EnteredName}
-AddNameIntent i'm {EnteredName} {LastNameInitial}
 AddNameIntent {EnteredName}
-AddNameIntent {EnteredName} {LastNameInitial}
 AddBirthdateIntent my birthday is {EnteredBirthdate}
 AddBirthdateIntent my birthdate is {EnteredBirthdate}
 AddBirthdateIntent I was born on {EnteredBirthdate}
 AddBirthdateIntent {EnteredBirthdate}
 AddBirthdateIntent {EnteredName} {EnteredBirthdate}
-AddBirthdateIntent {EnteredName} {LastNameInitial} {EnteredBirthdate}
 AddBirthdateIntent {EnteredName} was born on {EnteredBirthdate}
 AddBirthdateIntent {EnteredName} born on {EnteredBirthdate}
 AddBirthdateIntent {EnteredName} birthday is {EnteredBirthdate}
@@ -25,7 +21,6 @@ EntryModeIntent add
 EntryModeIntent add birthday
 EntryModeIntent add birthdate
 HowOldIntent how old is {EnteredName}
-HowOldIntent how old is {EnteredName} {LastNameInitial}
 HowOldAmIIntent how old am I
 HowOldAmIIntent I am how old
 ListBirthdaysIntent list
@@ -35,15 +30,10 @@ WhoseCalendarIntent whose calendar is this
 WhoseCalendarIntent who's the owner of this calendar
 WhoseCalendarIntent who is the owner of this calendar
 HowManyDaysTillIntent how many days until {EnteredName} birthday
-HowManyDaysTillIntent how many days until {EnteredName} {LastNameInitial} birthday
 HowManyDaysTillIntent how many days to {EnteredName} birthday
-HowManyDaysTillIntent how many days to {EnteredName} {LastNameInitial} birthday
 HowManyDaysTillIntent in how many days is {EnteredName} birthday
-HowManyDaysTillIntent in how many days is {EnteredName} {LastNameInitial} birthday
 WhenIsBirthdayIntent when is {EnteredName} birthday
-WhenIsBirthdayIntent when is {EnteredName} {LastNameInitial} birthday
 WhenIsBirthdayIntent what is {EnteredName} birthdate
-WhenIsBirthdayIntent what is {EnteredName} {LastNameInitial} birthdate
 DaysToChristmasIntent how many days until christmas
 DaysToChristmasIntent day to christmas
 NextBirthdayIntent whose birthday is next

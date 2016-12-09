@@ -25,7 +25,7 @@ const getName = function getName() {
 
   const input = this.event.request.intent.slots.EnteredName.value;
   const name = me.indexOf(input.toLowerCase()) > -1
-    ? this.attributes.owner : input;
+    ? this.attributes.owner : nameHelper.getName.call(this);
 
   return nameHelper.dePossessiveName.call(this, name);
 };
